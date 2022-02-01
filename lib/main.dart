@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String path = "Empty path";
+  String path = "Placeholder";
 
   void _incrementCounter() {
     setState(() async {
