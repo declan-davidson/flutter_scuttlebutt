@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:scuttlebutt_feed/scuttlebutt_feed.dart';
 
 void main() {
   runApp(const MyApp());
@@ -98,4 +98,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return tableRows;
   }
+}
+
+Future<Database> openTestDatabase() async {
+return openDatabase(
+  join(await getDatabasesPath(), "test.db"),
+  version: 1,
+  onCreate: (db, version) {
+    return db.execute("CREATE TABLE peers(id INTEGER PRIMARY KEY AUTOINCREMENT, content INTEGER NOT NULL)");
+  },
+  onConfigure: (db) { db.execute("PRAGMA foreign_keys = ON"); }
+);
 }

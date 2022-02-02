@@ -36,8 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.8
   sqflite: ^2.0.2
-  scuttlebutt_feed:
-    path: C:\Users\Declan\Documents\University\Project\Flutter feed\scuttlebutt_feed
 
 dev_dependencies:
   flutter_test:
