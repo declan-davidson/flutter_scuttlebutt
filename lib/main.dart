@@ -1,7 +1,9 @@
 import 'dart:io';
-
+import 'dart:math';
+import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scuttlebutt_feed/scuttlebutt_feed.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,26 +20,34 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key){
+    openDb();
+  }
   final String title;
+  late Database db;
+
+  void openDb() async {
+    db = await openTestDatabase();
+  }
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String path = "Placeholder";
+  Random rng = Random();
+  List<Map<String, Object?>> rows = [];
 
-  void _incrementCounter() {
+  void _insertRow() {
     setState(() async {
-      Directory directory = await getApplicationDocumentsDirectory();
-      path = directory.path;
+      await widget.db.insert("test", { "content": rng.nextInt(1000) });
+      rows = await widget.db.query("test");
     });
   }
 
@@ -55,41 +65,37 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              path,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Table(
+              children: generateTableRows(),
+            )
+          )
+        ]
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _insertRow,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  List<TableRow> generateTableRows(){
+    List<TableRow> tableRows = [const TableRow(children: [Text("ID"), Text("Content")])];
+
+    rows.forEach((element) {
+      List<Text> entries = [];
+
+      element.forEach((key, value) {
+        entries.add(Text(value.toString()));
+      });
+
+      tableRows.add(TableRow(children: entries));
+    });
+
+    return tableRows;
   }
 }
