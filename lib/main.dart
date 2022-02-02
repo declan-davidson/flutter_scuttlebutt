@@ -44,10 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Random rng = Random();
   List<Map<String, Object?>> rows = [];
 
-  void _insertRow() {
-    setState(() async {
-      await widget.db.insert("test", { "content": rng.nextInt(1000) });
-      rows = await widget.db.query("test");
+  void _insertRow() async {
+    await widget.db.insert("test", { "content": rng.nextInt(1000) });
+    rows = await widget.db.query("test");
+    setState(() {
     });
   }
 
