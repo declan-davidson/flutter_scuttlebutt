@@ -105,7 +105,7 @@ return openDatabase(
   join(await getDatabasesPath(), "test.db"),
   version: 1,
   onCreate: (db, version) {
-    return db.execute("CREATE TABLE peers(id INTEGER PRIMARY KEY AUTOINCREMENT, content INTEGER NOT NULL)");
+    return db.execute("CREATE TABLE test(id INTEGER PRIMARY KEY AUTOINCREMENT, content INTEGER NOT NULL)");
   },
   onConfigure: (db) { db.execute("PRAGMA foreign_keys = ON"); }
 );
