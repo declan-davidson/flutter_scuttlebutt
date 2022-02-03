@@ -20,9 +20,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   List<dynamic> privateMessages = [];
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    sharedPreferences = await SharedPreferences.getInstance();
+    //sharedPreferences = await SharedPreferences.getInstance();
 /* 
     if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
       Sodium.init();
