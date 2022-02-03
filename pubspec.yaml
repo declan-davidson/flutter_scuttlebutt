@@ -37,6 +37,8 @@ dependencies:
   path_provider: ^2.0.8
   sqflite: ^2.0.2
   google_fonts: ^2.2.0
+  shared_preferences: ^2.0.12
+  flutter_sodium: ^0.2.0
 
 dev_dependencies:
   flutter_test:
