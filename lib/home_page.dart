@@ -43,6 +43,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
       });
     }
+    else{
+      setState(() {
+        lastMessageBody = "Couldn't get shared prefs";
+      });
+    }
   }
 
   void checkIdentityExists() async {
