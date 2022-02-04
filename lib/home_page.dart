@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,12 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+  Random rng = Random();
   late SharedPreferences sharedPreferences;
   late TabController _tabController;
   String identity = "Author";
   List<Tab> _tabs = [Tab(child: Text("Messages", style: GoogleFonts.robotoMono())), Tab(child: Text("Private messages", style: GoogleFonts.robotoMono()))]; //Right now these aren't correctly changed, they have to be manuially done. Maybe we need to set different styles in main.dart?
   List<dynamic> messages = [];
   List<dynamic> privateMessages = [];
+  String lastMessageBody = "We haven't checked yet!";
+
 
   @override
   void initState() {
@@ -32,7 +36,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     String? encodedSk = sharedPreferences.getString("encodedSk");
 
     if(identity != null && encodedSk != null){
-      FeedService.postMessage("Test message", identity, encodedSk);
+      FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk).then((value) {
+        FeedService.retrieveMessages(identity: identity).then((messages) {
+          setState(() {
+            lastMessageBody = messages.last.content["content"];
+          });
+        });
+      });
     }
   }
 
@@ -100,7 +110,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: makeTestPost,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

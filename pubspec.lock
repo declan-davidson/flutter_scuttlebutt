@@ -238,7 +238,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e4a5b1682c5629e581e6679917dabf63f6c8d360
+      resolved-ref: f52edb6b61ae696c27f6790957231b512516f775
       url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
     source: git
     version: "0.0.1"
@@ -393,7 +393,7 @@ packages:
       name: xdg_directories
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.0+1"
 sdks:
   dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
