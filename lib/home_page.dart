@@ -31,17 +31,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     _tabController = TabController(vsync: this, length: _tabs.length);
   }
 
-  void makeTestPost(){
+  void makeTestPost() async {
     String? identity = sharedPreferences.getString("identity");
     String? encodedSk = sharedPreferences.getString("encodedSk");
 
     if(identity != null && encodedSk != null){
-      FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk).then((value) {
-        FeedService.retrieveMessages(identity: identity).then((messages) {
-          lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
-          setState(() {
-          });
-        });
+      await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
+      List<dynamic> messages = await FeedService.retrieveMessages(identity: identity);
+      
+      setState(() {
+        lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
       });
     }
   }
