@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                       Container(
                         padding: EdgeInsets.all(16),
-                        child: Text("A message would go here. Something like LALALALALALALALALALA here's some really cool interesting things I want to say!"),
+                        child: Text(lastMessageBody),
                       ),
                     ],
                   ),
