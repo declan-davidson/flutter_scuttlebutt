@@ -47,9 +47,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
       String identity = base64Encode(keyPair.pk);
 
-      sharedPreferences.setString("identity", "@$identity.ed25519");
-      sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
+      await sharedPreferences.setString("identity", "@$identity.ed25519");
+      await sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
     }
+
+    setState(() {
+      identity = sharedPreferences.getString("identity") ?? "ID not found";
+    });
   }
 
   /* void _insertRow() async {
@@ -82,7 +86,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     children: [
                       ListTile(
                         leading: Icon(Icons.person_rounded),
-                        title: Text(sharedPreferences.getString("identity") != null ? sharedPreferences.getString("identity")! : "Dummy author"),
+                        title: Text(identity),
                         subtitle: Text("x hours ago")
                       ),
                       Container(
