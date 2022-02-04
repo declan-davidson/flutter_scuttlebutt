@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if(identity != null && encodedSk != null){
       FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk).then((value) {
         FeedService.retrieveMessages(identity: identity).then((messages) {
+          lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
           setState(() {
-            lastMessageBody = messages.last.content["content"];
           });
         });
       });
