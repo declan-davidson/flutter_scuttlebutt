@@ -233,6 +233,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  scuttlebutt_feed:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: e4a5b1682c5629e581e6679917dabf63f6c8d360
+      url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
+    source: git
+    version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
     description:

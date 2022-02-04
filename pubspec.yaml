@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^2.2.0
   shared_preferences: ^2.0.12
   flutter_sodium: ^0.2.0
+  scuttlebutt_feed:
+    git: https://github.com/declan-davidson/scuttlebutt_feed.git
 
 dev_dependencies:
   flutter_test:

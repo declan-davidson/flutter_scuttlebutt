@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_sodium/flutter_sodium.dart';
+import 'package:scuttlebutt_feed/scuttlebutt_feed.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,20 +24,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     checkIdentityExists();
-    //sharedPreferences = await SharedPreferences.getInstance();
-/* 
-    if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
-      Sodium.init();
-      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
-      String identity = base64Encode(keyPair.pk);
-
-      sharedPreferences.setString("identity", "@$identity.ed25519");
-      sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
-    }
-
-    String? identity = sharedPreferences.getString("identity");
-    this.identity = identity!; */
     _tabController = TabController(vsync: this, length: _tabs.length);
+  }
+
+  void makeTestPost(){
+    String? identity = sharedPreferences.getString("identity");
+    String? encodedSk = sharedPreferences.getString("encodedSk");
+
+    if(identity != null && encodedSk != null){
+      FeedService.postMessage("Test message", identity, encodedSk);
+    }
   }
 
   void checkIdentityExists() async {
@@ -45,10 +42,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
       Sodium.init();
       KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
-      String identity = base64Encode(keyPair.pk);
+      String encodedPk = base64Encode(keyPair.pk);
 
-      await sharedPreferences.setString("identity", "@$identity.ed25519");
-      await sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
+      await sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+      await sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
     }
 
     setState(() {
