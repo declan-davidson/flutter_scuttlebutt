@@ -50,9 +50,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       sharedPreferences.setString("identity", "@$identity.ed25519");
       sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
     }
-
-    String? identity = sharedPreferences.getString("identity");
-    this.identity = identity!;
   }
 
   /* void _insertRow() async {
@@ -85,7 +82,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     children: [
                       ListTile(
                         leading: Icon(Icons.person_rounded),
-                        title: Text(identity),
+                        title: Text(sharedPreferences.getString("identity") != null ? sharedPreferences.getString("identity")! : "Dummy author"),
                         subtitle: Text("x hours ago")
                       ),
                       Container(
