@@ -35,17 +35,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     String? identity = sharedPreferences.getString("identity");
     String? encodedSk = sharedPreferences.getString("encodedSk");
 
-    if(identity != null && encodedSk != null){
-      await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
-      List<dynamic> messages = await FeedService.retrieveMessages(identity: identity);
-      lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
-      
-      setState(() {
-      });
-    }
-    else{
-      setState(() {
+    try{
+      if(identity != null && encodedSk != null){
+        await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
+        List<dynamic> messages = await FeedService.retrieveMessages(identity: identity);
+        lastMessageBody = messages.last.content["content"] ?? "Nothing was returned";
+        
+        setState(() {
+        });
+      }
+      else{
         lastMessageBody = "Couldn't get shared prefs";
+        setState(() {
+        });
+      }
+    }
+    on Exception catch(e){
+      lastMessageBody = e.toString();
+      setState(() {
       });
     }
   }
