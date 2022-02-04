@@ -113,7 +113,7 @@ packages:
       name: google_fonts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   http:
     dependency: transitive
     description:
@@ -238,7 +238,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: f52edb6b61ae696c27f6790957231b512516f775
+      resolved-ref: a54f8694b479a7592ae7c5d7187d9b9af5b6d80f
       url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
     source: git
     version: "0.0.1"
