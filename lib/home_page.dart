@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    checkIdentityExists();
     //sharedPreferences = await SharedPreferences.getInstance();
 /* 
     if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
@@ -36,6 +37,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     String? identity = sharedPreferences.getString("identity");
     this.identity = identity!; */
     _tabController = TabController(vsync: this, length: _tabs.length);
+  }
+
+  void checkIdentityExists() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
+      Sodium.init();
+      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+      String identity = base64Encode(keyPair.pk);
+
+      sharedPreferences.setString("identity", "@$identity.ed25519");
+      sharedPreferences.setString("privateKey", base64Encode(keyPair.pk));
+    }
+
+    String? identity = sharedPreferences.getString("identity");
+    this.identity = identity!;
   }
 
   /* void _insertRow() async {
