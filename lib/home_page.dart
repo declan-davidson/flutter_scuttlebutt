@@ -39,7 +39,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       if(identity != null && encodedSk != null){
         await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
         List<dynamic> messages = await FeedService.retrieveMessages(identity: identity);
-        lastMessageBody = messages.last.content ?? "Nothing was returned";
+        if(messages.isNotEmpty){
+          lastMessageBody = "Messages not empty";
+        }
+        else{
+          lastMessageBody = "Messages empty";
+        }
         
         setState(() {
         });
