@@ -38,9 +38,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     try{
       if(identity != null && encodedSk != null){
         await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
-        List<Map> messages = await FeedService.retrieveMessages(identity: identity);
+        List<FeedMessage> messages = await FeedService.retrieveMessages(identity: identity);
         if(messages.isNotEmpty){
-          lastMessageBody = messages[0].toString();
+          lastMessageBody = messages[0].author;
         }
         else{
           lastMessageBody = "Messages empty";
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void checkIdentityExists() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("privateKey"))){
+    if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("encodedSk"))){
       Sodium.init();
       KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
       String encodedPk = base64Encode(keyPair.pk);
