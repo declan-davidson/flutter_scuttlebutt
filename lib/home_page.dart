@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
         List<FeedMessage> messages = await FeedService.retrieveMessages(identity: identity);
         if(messages.isNotEmpty){
-          lastMessageBody = messages[0].author;
+          lastMessageBody = "Messages not empty";
         }
         else{
           lastMessageBody = "Messages empty";
