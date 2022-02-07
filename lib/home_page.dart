@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_sodium/flutter_sodium.dart';
@@ -18,7 +17,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late SharedPreferences sharedPreferences;
   late TabController _tabController;
   String identity = "Author";
-  List<Tab> _tabs = [Tab(child: Text("Messages", style: GoogleFonts.robotoMono())), Tab(child: Text("Private messages", style: GoogleFonts.robotoMono()))]; //Right now these aren't correctly changed, they have to be manuially done. Maybe we need to set different styles in main.dart?
+  List<Tab> _tabs = [Tab(child: Text("Messages")), Tab(child: Text("Private messages"))]; //Right now these aren't correctly changed, they have to be manuially done. Maybe we need to set different styles in main.dart?
   List<dynamic> messages = [];
   List<dynamic> privateMessages = [];
   String lastMessageBody = "We haven't checked yet!";
@@ -40,7 +39,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         await FeedService.postMessage(rng.nextInt(1000).toString(), identity, encodedSk);
         List<FeedMessage> messages = await FeedService.retrieveMessages(identity: identity);
         if(messages.isNotEmpty){
-          lastMessageBody = "Messages not empty";
+          lastMessageBody = "Messages not empty. Number of messages: ${messages.length}";
         }
         else{
           lastMessageBody = "Messages empty";

@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.12
   flutter_sodium: ^0.2.0
   scuttlebutt_feed:
+    # path: C:\Users\Declan\Documents\University\Project\Flutter feed\scuttlebutt_feed
     git: https://github.com/declan-davidson/scuttlebutt_feed.git
 
 dev_dependencies:
