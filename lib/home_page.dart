@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void retrieveMessages() async {
-    messages = await FeedService.retrieveMessages(identity: identity);
+    messages = await FeedService.retrieveMessages(identity: identity, hops: 2);
     setState(() {
     });
   }
@@ -102,7 +102,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    print("Building homepage");
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () => {},),
@@ -122,11 +121,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           const Text("Tab 2"),
         ],
       ),
-      bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,), /* ElevatedButton(
-        child: Text("whatever"),
-        onPressed: () => showModalBottomSheet(context: context, builder: (context){ return Text("whatever"); }).then((value) => setState(() {})), //this is how we trigger setState
-      ), */
-      floatingActionButton: FloatingActionButton(onPressed: () => setState(() {}),)
+      bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
     );
   }
 
@@ -136,26 +131,40 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       child: ListView.separated(
         itemCount: messages.length,
         itemBuilder: (BuildContext c, int i){
-          return Card(
-            elevation: 3.5,
-            child: Column(
-              children: [
-                Padding(padding: EdgeInsets.only(top: 8)),
-                ListTile(
-                  leading: Icon(Icons.person_rounded),
-                  title: Padding(
-                    padding: EdgeInsetsDirectional.only(bottom: 4),
-                    child: Text(messages[i].author, overflow: TextOverflow.fade, softWrap: false,),
+          List<Widget> columnChildren = [
+            Card(
+              elevation: 3.5,
+              child: Column(
+                children: [
+                  Padding(padding: EdgeInsets.only(top: 8)),
+                  ListTile(
+                    leading: Icon(Icons.person_rounded),
+                    title: Padding(
+                      padding: EdgeInsetsDirectional.only(bottom: 4),
+                      child: Text(messages[i].author, overflow: TextOverflow.fade, softWrap: false,),
+                    ),
+                    subtitle: Text(readableTime(messages[i].timestamp)),
+                    contentPadding: EdgeInsets.fromLTRB(16, 0, 24, 0),
                   ),
-                  subtitle: Text(readableTime(messages[i].timestamp)),
-                  contentPadding: EdgeInsets.fromLTRB(16, 0, 24, 0),
-                ),
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Text(messages[i].content["content"]),
-                ),
-              ],
-            ),
+                  Container(
+                    alignment: Alignment(-1, 0),
+                    padding: EdgeInsets.all(16),
+                    child: Text(messages[i].content["content"], textAlign: TextAlign.left,),
+                  ),
+                ],
+              ),
+            )
+          ];
+
+          if(i == 0){
+            columnChildren.insert(0, Padding(padding: EdgeInsets.only(top: 10)));
+          }
+          else if(i == messages.length -1){
+            columnChildren.add(Padding(padding: EdgeInsets.only(bottom: 62)));
+          }
+
+          return Column(
+            children: columnChildren
           );
         },
         separatorBuilder: (BuildContext c, int i) => Padding(padding: EdgeInsets.only(bottom: 8))

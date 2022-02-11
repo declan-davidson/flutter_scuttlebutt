@@ -18,7 +18,6 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
 
   @override
   Widget build(BuildContext context) {
-    print(context.toString());
     return DecoratedBox(
       decoration: const BoxDecoration(
         boxShadow: [
@@ -61,6 +60,7 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
                     child: TextFormField(
                       maxLines: 6,
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(labelText: "Message"),
                       onSaved: (String? message) {
                         if(message != null) _message = message;
