@@ -8,6 +8,8 @@ import 'package:flutter_sodium/flutter_sodium.dart';
 import 'package:scuttlebutt_feed/scuttlebutt_feed.dart';
 import 'package:time_elapsed/time_elapsed.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+//import 'package:dart_muxrpc/dart_muxrpc.dart';
+import 'package:flutter_muxrpc/flutter_muxrpc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -122,7 +124,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ],
       ),
       bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: attemptConnection,
+      ),
     );
+  }
+
+  void attemptConnection() async {
+    RpcClient client = RpcClient();
+    client.start();
+    await Future.delayed(const Duration(seconds: 2));
+    client.createHistoryStream(id: "someId");
+    await Future.delayed(const Duration(seconds: 10));
+    client.finish();
+    retrieveMessages();
   }
 
   Widget produceMessageList(){

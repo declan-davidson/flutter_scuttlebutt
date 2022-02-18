@@ -40,11 +40,15 @@ dependencies:
   shared_preferences: ^2.0.12
   flutter_sodium: ^0.2.0
   scuttlebutt_feed:
-    # path: C:\Users\Declan\Documents\University\Project\Flutter feed\scuttlebutt_feed
-    git: https://github.com/declan-davidson/scuttlebutt_feed.git
+    path: C:\Users\Declan\Documents\University\Project\Flutter feed\scuttlebutt_feed
+    # git: https://github.com/declan-davidson/scuttlebutt_feed.git
   intl: ^0.17.0
   time_elapsed: ^0.2.6
   flutter_displaymode: ^0.3.2
+  # dart_muxrpc:
+    # path: C:\Users\Declan\Documents\University\Project\MuxRPC\dart-muxrpc
+  flutter_muxrpc:
+    path: C:\Users\Declan\Documents\University\Project\Flutter MuxRPC\flutter_muxrpc
 
 dev_dependencies:
   flutter_test:
