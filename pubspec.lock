@@ -111,7 +111,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "0660c5edd647b85f3b527a2de5c9b2885bef09d1"
+      resolved-ref: ae2ab9622004430c55752201ea358cd2bb45dda9
       url: "https://github.com/declan-davidson/flutter_muxrpc"
     source: git
     version: "0.0.1"
