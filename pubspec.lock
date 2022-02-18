@@ -60,9 +60,11 @@ packages:
   dart_secret_handshake:
     dependency: transitive
     description:
-      path: "C:\\Users\\Declan\\Documents\\University\\Project\\Secret handshake working\\dart-secret-handshake"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: f42bed2cffa7f8ea66d6deb23576ceb995ec60ac
+      url: "https://github.com/declan-davidson/dart_secret_handshake"
+    source: git
     version: "1.0.0"
   fake_async:
     dependency: transitive
@@ -107,9 +109,11 @@ packages:
   flutter_muxrpc:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\Declan\\Documents\\University\\Project\\Flutter MuxRPC\\flutter_muxrpc"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "0660c5edd647b85f3b527a2de5c9b2885bef09d1"
+      url: "https://github.com/declan-davidson/flutter_muxrpc"
+    source: git
     version: "0.0.1"
   flutter_sodium:
     dependency: "direct main"
@@ -278,9 +282,11 @@ packages:
   scuttlebutt_feed:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\Declan\\Documents\\University\\Project\\Flutter feed\\scuttlebutt_feed"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "17a5dd612cbca95dcf0a68d9eb1190a7aa987219"
+      url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
+    source: git
     version: "0.0.1"
   shared_preferences:
     dependency: "direct main"
