@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((duration) async {
       await setOptimalDisplayMode();
-      await checkIdentityExists();
+      await getIdentity();
       await retrieveMessages();
     });
     super.initState();
@@ -74,20 +74,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
     return TimeElapsed.fromDateTime(timestampDate);
   }
 
-  Future<void> checkIdentityExists() async {
+  Future<void> getIdentity() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    if(!(sharedPreferences.containsKey("identity")) || !(sharedPreferences.containsKey("encodedSk"))){
-      Sodium.init();
-      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
-      String encodedPk = base64Encode(keyPair.pk);
-
-      await sharedPreferences.setString("identity", "@$encodedPk.ed25519");
-      await sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
-    }
-
-    identity = sharedPreferences.getString("identity") ?? "";
-    encodedSk = sharedPreferences.getString("encodedSk") ?? "";
+    identity = sharedPreferences.getString("identity")!;
+    encodedSk = sharedPreferences.getString("encodedSk")!;
   }
 
   //This currently appears to be ignored, at least on my phone

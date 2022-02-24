@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scuttlebutt/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_sodium/flutter_sodium.dart';
+import 'dart:convert';
 
 class Tutorial extends StatefulWidget{
   const Tutorial({Key? key}) : super(key: key);
@@ -106,6 +108,12 @@ class _TutorialState extends State<Tutorial>{
     double currentPage = controller.page!;
 
     if(currentPage % 1 == 0){
+      Sodium.init();
+      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+      String encodedPk = base64Encode(keyPair.pk);
+      sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+      sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
+
       sharedPreferences.setBool("firstRun", false);
       Navigator.pushAndRemoveUntil(
         context, 
