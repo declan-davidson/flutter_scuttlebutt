@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_scuttlebutt/new_post_dialog.dart';
 import 'package:flutter_scuttlebutt/post_message_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,45 +19,52 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
-  Random rng = Random();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final String dummyContent = "Hi! This is ANOTHER REALLY BIG MESSAGE to check if the cards expand properly! They definitely should do! I'll be VERY upset if they don't! >:( Hi! This is a REALLY BIG MESSAGE to check if the cards expand properly! They definitely should do! I'll be VERY upset if they don't! >:(";
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late SharedPreferences sharedPreferences;
   late TabController _tabController;
   late String identity;
   late String encodedSk;
 
-  List<Tab> _tabs = [Tab(child: Text("Messages")), Tab(child: Text("Private messages"))]; //Right now these aren't correctly changed, they have to be manually done. Maybe we need to set different styles in main.dart?
-  List<FeedMessage> messages = [];
-  String lastMessageBody = "We haven't checked yet!";
+  List<Tab> _tabs = [];
+  Map<String, List<FeedMessage>> filteredMessages = {};
 
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((duration) async {
+      await setOptimalDisplayMode();
+      await checkIdentityExists();
+      await retrieveMessages();
+    });
     super.initState();
-    setOptimalDisplayMode();
-    checkIdentityExists().then((void x) => retrieveMessages());
+  }
+
+  Future<void> retrieveMessages() async {
+    RegExp hashtagRegex = RegExp(r"(?=\s*)#(?:[^\s#])+");
+    _tabs = [const Tab(child: Text("All messages"))];
+    filteredMessages = { "All messages": [] };
+    List<FeedMessage> messages = await FeedService.retrieveMessages(identity: identity, hops: 2);
+
+    for(FeedMessage message in messages){
+      Iterable<RegExpMatch> channels = hashtagRegex.allMatches(message.content["content"]);
+
+      for(RegExpMatch channel in channels){
+        String channelString = channel.group(0)!;
+
+        if(!(filteredMessages.containsKey(channelString))){
+          filteredMessages[channelString] = [];
+          _tabs.add(Tab(child: Text(channelString)));
+        }
+
+        filteredMessages[channelString]!.add(message);
+      }
+
+      filteredMessages["All messages"]!.add(message);
+    }
+
     _tabController = TabController(vsync: this, length: _tabs.length);
-  }
 
-  void makeTestPost() async {
-    try{
-      await FeedService.postMessage(dummyContent, identity, encodedSk);
-      messages = await FeedService.retrieveMessages(identity: identity);
-      
-      setState(() {
-      });
-    }
-    on Exception catch(e){
-      lastMessageBody = e.toString();
-      setState(() {
-      });
-    }
-  }
-
-  void retrieveMessages() async {
-    messages = await FeedService.retrieveMessages(identity: identity, hops: 2);
     setState(() {
     });
   }
@@ -78,10 +86,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       await sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
     }
 
-    setState(() {
-      identity = sharedPreferences.getString("identity") ?? "";
-      encodedSk = sharedPreferences.getString("encodedSk") ?? "";
-    });
+    identity = sharedPreferences.getString("identity") ?? "";
+    encodedSk = sharedPreferences.getString("encodedSk") ?? "";
   }
 
   //This currently appears to be ignored, at least on my phone
@@ -105,28 +111,49 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawerEnableOpenDragGesture: false,
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () => {},),
+        leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
         title: Text("Some title"),
         bottom: TabBar(
+          isScrollable: true,
           controller: _tabController,
           tabs: _tabs,
         ),
       ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.blue,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      title: Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                      leading: Icon(Icons.person_rounded),
+                    )
+                  ]
+                )
+              ),
+            )
+          ],
+        )
+      ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          //MESSAGES TAB
-          produceMessageList(),
-
-          //PRIVATE MESSAGES TAB
-          const Text("Tab 2"),
-        ],
+        children: produceMessageLists(),
       ),
-      bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
+      //bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
+      /* floatingActionButton: FloatingActionButton(
         onPressed: attemptConnection,
-      ),
+      ), */
     );
   }
 
@@ -140,9 +167,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     retrieveMessages();
   }
 
-  Widget produceMessageList(){
+  List<Widget> produceMessageLists(){
+    List<Widget> messageLists = [];
+
+    filteredMessages.forEach((channel, messages) {
+      messageLists.add(produceMessageList(messages));
+    });
+
+    return messageLists;
+  }
+
+  Widget produceMessageList(List<FeedMessage> messages){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: ListView.separated(
         itemCount: messages.length,
         itemBuilder: (BuildContext c, int i){
@@ -175,7 +212,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             columnChildren.insert(0, Padding(padding: EdgeInsets.only(top: 10)));
           }
           else if(i == messages.length -1){
-            columnChildren.add(Padding(padding: EdgeInsets.only(bottom: 62)));
+            columnChildren.add(Padding(padding: EdgeInsets.only(bottom: 72)));
           }
 
           return Column(
