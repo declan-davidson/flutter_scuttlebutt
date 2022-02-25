@@ -191,9 +191,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                   ),
                   Container(
                     alignment: Alignment(-1, 0),
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                     child: Text(messages[i].content["content"], textAlign: TextAlign.left,),
                   ),
+                  ButtonBar(
+                    buttonPadding: EdgeInsets.zero,
+                    children: [
+                      Text(messages[i].likes.toString()),
+                      IconButton(
+                        onPressed: () async {
+                          await FeedService.likeMessage(messages[i].id);
+                          retrieveMessages();
+                        },
+                        icon: Icon(Icons.thumb_up_alt_rounded, color: Colors.grey,),
+                        iconSize: 20,
+                      ),
+                    ],
+                  )
                 ],
               ),
             )
