@@ -26,6 +26,7 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
       child: FloatingActionButton.extended(
         label: Text("New message"),
         onPressed: () => showModalBottomSheet(
+          isScrollControlled: true,
           constraints: BoxConstraints(maxHeight: double.infinity, maxWidth: screenWidth - 30),
           shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.vertical(top: Radius.circular(25))),
           backgroundColor: Colors.transparent,
@@ -87,7 +88,7 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
                           },
                         ),
                       ),
-                      Padding(padding: MediaQuery.of(context).viewInsets + EdgeInsets.only(bottom: 15))
+                      Padding(padding: MediaQuery.of(context).viewInsets + EdgeInsets.only(bottom: 10))
                     ]
                   )
                 ],
