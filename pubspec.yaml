@@ -49,6 +49,7 @@ dependencies:
     # path: C:\Users\Declan\Documents\University\Project\MuxRPC\dart-muxrpc
   flutter_muxrpc:
     git: https://github.com/declan-davidson/flutter_muxrpc
+  page_transition: ^2.0.5
     # path: C:\Users\Declan\Documents\University\Project\Flutter MuxRPC\flutter_muxrpc
 
 dev_dependencies:

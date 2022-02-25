@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_scuttlebutt/join_gathering.dart';
 import 'package:flutter_scuttlebutt/new_post_dialog.dart';
 import 'package:flutter_scuttlebutt/post_message_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,7 @@ import 'package:time_elapsed/time_elapsed.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 //import 'package:dart_muxrpc/dart_muxrpc.dart';
 import 'package:flutter_muxrpc/flutter_muxrpc.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -101,6 +103,173 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    switch(sharedPreferences.getInt("currentStep")) {
+      case 1: {
+        return step1();
+      }
+      default: {
+        return defaultBuild();
+      }
+    }
+  }
+
+  void setStep(int step) {
+    sharedPreferences.setInt("currentStep", step);
+    
+    switch(step){
+      case 3:
+      case 2: {
+        retrieveMessages();
+      } break;
+      default: {
+        setState(() {});
+      }
+    }
+  }
+
+  Widget step1() {
+    return Scaffold(
+      key: _scaffoldKey,
+      drawerEnableOpenDragGesture: false,
+      appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
+        title: Text("Some title"),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.blue,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      title: Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                      leading: Icon(Icons.person_rounded),
+                    )
+                  ]
+                )
+              ),
+            )
+          ],
+        )
+      ),
+      body: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("You aren't currently attending a gathering.\n Join one to get started!", style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.5), textAlign: TextAlign.center,),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            ElevatedButton(
+              child: Text("Join a gathering"),
+              onPressed: () => Navigator.push(context, PageTransition(child: JoinGathering(setStepCallback: setStep), type: PageTransitionType.rightToLeft, duration: Duration(milliseconds: 200), reverseDuration: Duration(milliseconds: 200))),
+            )
+          ]
+        )
+      ),
+    );
+  }
+
+  void attemptConnection() async {
+    RpcClient client = RpcClient();
+    client.start();
+    await Future.delayed(const Duration(seconds: 2));
+    client.createHistoryStream(id: "someId");
+    await Future.delayed(const Duration(seconds: 10));
+    client.finish();
+    retrieveMessages();
+  }
+
+  List<Widget> produceMessageLists(){
+    List<Widget> messageLists = [];
+
+    filteredMessages.forEach((channel, messages) {
+      messageLists.add(produceMessageList(messages));
+    });
+
+    return messageLists;
+  }
+
+  Widget produceMessageList(List<FeedMessage> messages){
+    late Function refreshAction;
+
+    switch(sharedPreferences.getInt("currentStep")){
+      case 2: {
+        refreshAction = () async {
+          KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+          String encodedPk = base64Encode(keyPair.pk);
+          String identity = "@$encodedPk.ed25519";
+          String encodedSk = base64Encode(keyPair.sk);
+
+          await FeedService.postMessage("Remember where we're going guys #important #announcement", identity, encodedSk);
+
+          await Future.delayed(const Duration(seconds: 1));
+          setStep(3);
+        };
+      } break;
+      default: {
+        refreshAction = () async {
+          await Future.delayed(const Duration(seconds: 1));
+          retrieveMessages();
+        };
+      }
+    }
+
+    return RefreshIndicator(
+      onRefresh: () => refreshAction(),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: ListView.separated(
+          itemCount: messages.length,
+          itemBuilder: (BuildContext c, int i){
+            List<Widget> columnChildren = [
+              Card(
+                elevation: 3.5,
+                child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 8)),
+                    ListTile(
+                      leading: Icon(Icons.person_rounded),
+                      title: Padding(
+                        padding: EdgeInsetsDirectional.only(bottom: 4),
+                        child: Text(messages[i].author, overflow: TextOverflow.fade, softWrap: false,),
+                      ),
+                      subtitle: Text(readableTime(messages[i].timestamp)),
+                      contentPadding: EdgeInsets.fromLTRB(16, 0, 24, 0),
+                    ),
+                    Container(
+                      alignment: Alignment(-1, 0),
+                      padding: EdgeInsets.all(16),
+                      child: Text(messages[i].content["content"], textAlign: TextAlign.left,),
+                    ),
+                  ],
+                ),
+              )
+            ];
+
+            if(i == 0){
+              columnChildren.insert(0, Padding(padding: EdgeInsets.only(top: 10)));
+            }
+            else if(i == messages.length -1){
+              columnChildren.add(Padding(padding: EdgeInsets.only(bottom: 72)));
+            }
+
+            return Column(
+              children: columnChildren
+            );
+          },
+          separatorBuilder: (BuildContext c, int i) => Padding(padding: EdgeInsets.only(bottom: 8))
+        ),
+      )
+    );
+  }
+
+  Widget defaultBuild() {
     return Scaffold(
       key: _scaffoldKey,
       drawerEnableOpenDragGesture: false,
@@ -141,77 +310,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         children: produceMessageLists(),
       ),
       floatingActionButton: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
-      //bottomSheet: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
-      /* floatingActionButton: FloatingActionButton(
-        onPressed: attemptConnection,
-      ), */
-    );
-  }
-
-  void attemptConnection() async {
-    RpcClient client = RpcClient();
-    client.start();
-    await Future.delayed(const Duration(seconds: 2));
-    client.createHistoryStream(id: "someId");
-    await Future.delayed(const Duration(seconds: 10));
-    client.finish();
-    retrieveMessages();
-  }
-
-  List<Widget> produceMessageLists(){
-    List<Widget> messageLists = [];
-
-    filteredMessages.forEach((channel, messages) {
-      messageLists.add(produceMessageList(messages));
-    });
-
-    return messageLists;
-  }
-
-  Widget produceMessageList(List<FeedMessage> messages){
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: ListView.separated(
-        itemCount: messages.length,
-        itemBuilder: (BuildContext c, int i){
-          List<Widget> columnChildren = [
-            Card(
-              elevation: 3.5,
-              child: Column(
-                children: [
-                  Padding(padding: EdgeInsets.only(top: 8)),
-                  ListTile(
-                    leading: Icon(Icons.person_rounded),
-                    title: Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 4),
-                      child: Text(messages[i].author, overflow: TextOverflow.fade, softWrap: false,),
-                    ),
-                    subtitle: Text(readableTime(messages[i].timestamp)),
-                    contentPadding: EdgeInsets.fromLTRB(16, 0, 24, 0),
-                  ),
-                  Container(
-                    alignment: Alignment(-1, 0),
-                    padding: EdgeInsets.all(16),
-                    child: Text(messages[i].content["content"], textAlign: TextAlign.left,),
-                  ),
-                ],
-              ),
-            )
-          ];
-
-          if(i == 0){
-            columnChildren.insert(0, Padding(padding: EdgeInsets.only(top: 10)));
-          }
-          else if(i == messages.length -1){
-            columnChildren.add(Padding(padding: EdgeInsets.only(bottom: 72)));
-          }
-
-          return Column(
-            children: columnChildren
-          );
-        },
-        separatorBuilder: (BuildContext c, int i) => Padding(padding: EdgeInsets.only(bottom: 8))
-      ),
+      bottomSheet: FloatingActionButton(onPressed: () => setStep(1)),
     );
   }
 }

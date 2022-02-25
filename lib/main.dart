@@ -43,14 +43,14 @@ class MyApp extends StatelessWidget {
     if(!sharedPreferences.containsKey("firstRun")) sharedPreferences.setBool("firstRun", true);
     if(!sharedPreferences.containsKey("identity")) sharedPreferences.setString("identity", "");
     if(!sharedPreferences.containsKey("encodedSk")) sharedPreferences.setString("encodedSk", "");
-    if(!sharedPreferences.containsKey("step1")) sharedPreferences.setBool("step1", false);
-    if(!sharedPreferences.containsKey("step2")) sharedPreferences.setBool("step2", false);
+    if(!sharedPreferences.containsKey("currentStep")) sharedPreferences.setInt("currentStep", 1);
+/*     if(!sharedPreferences.containsKey("step2")) sharedPreferences.setBool("step2", false);
     if(!sharedPreferences.containsKey("step3")) sharedPreferences.setBool("step3", false);
     if(!sharedPreferences.containsKey("step4")) sharedPreferences.setBool("step4", false);
     if(!sharedPreferences.containsKey("step5")) sharedPreferences.setBool("step5", false);
     if(!sharedPreferences.containsKey("step6")) sharedPreferences.setBool("step6", false);
     if(!sharedPreferences.containsKey("step7")) sharedPreferences.setBool("step7", false);
-    if(!sharedPreferences.containsKey("step8")) sharedPreferences.setBool("step8", false);
+    if(!sharedPreferences.containsKey("step8")) sharedPreferences.setBool("step8", false); */
 
     return sharedPreferences;
   }
