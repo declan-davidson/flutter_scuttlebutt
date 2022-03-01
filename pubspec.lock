@@ -291,7 +291,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ac197012cb92ddbf12a5765607c4f0cb932d9228
+      resolved-ref: "52a93fa50df39d99a6dcf46b46b4c3ea9682b44d"
       url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
     source: git
     version: "0.0.1"
