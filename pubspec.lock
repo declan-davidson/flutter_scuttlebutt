@@ -110,8 +110,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: ae2ab9622004430c55752201ea358cd2bb45dda9
+      ref: evaluation
+      resolved-ref: "89b86e68d2cf688febac643c7ee17c8bb93815ad"
       url: "https://github.com/declan-davidson/flutter_muxrpc"
     source: git
     version: "0.0.1"
@@ -290,8 +290,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "52a93fa50df39d99a6dcf46b46b4c3ea9682b44d"
+      ref: evaluation
+      resolved-ref: "1ba24c0df3a58ea72520c46d211d43b90c4a0aa7"
       url: "https://github.com/declan-davidson/scuttlebutt_feed.git"
     source: git
     version: "0.0.1"
