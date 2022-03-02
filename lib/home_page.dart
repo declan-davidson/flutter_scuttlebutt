@@ -44,8 +44,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
   Future<void> retrieveMessages() async {
     RegExp hashtagRegex = RegExp(r"(?=\s*)#(?:[^\s#])+");
-    _tabs = [const Tab(child: Text("All messages"))];
-    filteredMessages = { "All messages": [] };
+    _tabs = [const Tab(child: Text("All messages")), const Tab(child: Text("Most liked"))];
+    filteredMessages = { "All messages": [], "Most liked": [] };
     List<FeedMessage> messages = await FeedService.retrieveMessages(identity: identity, hops: 2);
 
     for(FeedMessage message in messages){
@@ -62,8 +62,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         filteredMessages[channelString]!.add(message);
       }
 
+      if(message.likes > 0) filteredMessages["Most liked"]!.add(message);
       filteredMessages["All messages"]!.add(message);
     }
+
+    filteredMessages["Most liked"]!.sort((b, a) => a.likes.compareTo(b.likes));
 
     _tabController = TabController(vsync: this, length: _tabs.length);
 
