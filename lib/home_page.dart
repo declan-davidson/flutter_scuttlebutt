@@ -137,14 +137,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawerEnableOpenDragGesture: false,
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
-        title: Text("Some title"),
+        title: Text("Gather"),
       ),
       drawer: Drawer(
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: Column(
           children: [
-            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 10),)),
+            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
@@ -155,12 +155,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                        Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
                         Padding(padding: EdgeInsets.only(bottom: 8),),
-                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                       ],
                     ),
-                    tileColor: Colors.blue,
+                    tileColor: Colors.amber,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
                   ),
                   Padding(padding: EdgeInsets.only(bottom: 10),),
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                       String encodedPk = base64Encode(keyPair.pk);
                       sharedPreferences.setString("identity", "@$encodedPk.ed25519");
                       sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
-
+                      
                       await FeedService.resetIdentity();
                       getIdentity();
                       setStep(1);
@@ -200,6 +200,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
             Text("You aren't currently attending a gathering.\n Join one to get started!", style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.5), textAlign: TextAlign.center,),
             Padding(padding: EdgeInsets.only(bottom: 10)),
             ElevatedButton(
+              style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))))),
               child: Text("Join a gathering"),
               onPressed: () => Navigator.push(context, PageTransition(child: JoinGathering(setStepCallback: setStep), type: PageTransitionType.rightToLeft, duration: Duration(milliseconds: 200), reverseDuration: Duration(milliseconds: 200))),
             )
@@ -334,7 +335,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawerEnableOpenDragGesture: false,
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
-        title: Text("Some title"),
+        title: Text("Gather"),
         bottom: TabBar(
           isScrollable: true,
           controller: _tabController,
@@ -346,7 +347,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         backgroundColor: Colors.transparent,
         child: Column(
           children: [
-            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 10),)),
+            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
@@ -357,12 +358,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                        Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
                         Padding(padding: EdgeInsets.only(bottom: 8),),
-                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                       ],
                     ),
-                    tileColor: Colors.blue,
+                    tileColor: Colors.amber,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
                   ),
                   Padding(padding: EdgeInsets.only(bottom: 10),),

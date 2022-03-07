@@ -18,7 +18,7 @@ class _TutorialState extends State<Tutorial>{
 
   @override
   void initState() {
-    buttonProps = { "label": Text("Next"), "color": Colors.blue, "onPressed": nextPage };
+    buttonProps = { "label": Text("Next"), "color": Colors.amber, "onPressed": nextPage };
     getSharedPreferencesInstance();
     super.initState();
   }
@@ -52,8 +52,8 @@ class _TutorialState extends State<Tutorial>{
                 label: Text("Back"),
                 onPressed: previousPage,
                 backgroundColor: Colors.white,
-                foregroundColor: Colors.blue,
-                shape: StadiumBorder(side: BorderSide(width: 2, color: Colors.blue)),
+                foregroundColor: Colors.amber,
+                shape: StadiumBorder(side: BorderSide(width: 2, color: Colors.amber)),
               )
             ]
           )
@@ -65,15 +65,27 @@ class _TutorialState extends State<Tutorial>{
 
   List<Widget> createTutorialPages(){
     return [
-      createTutorialPage("Page 1"),
-      createTutorialPage("Page 2"),
-      createTutorialPage("Page 3"),
-      createTutorialPage("Page 4")
+      createTutorialPage("The strength of public expression is powerful, and is amplified by unity. \n\nGatherings, marches and protests have brought down oppresive governments, improved racial equality and harkened the dawn of modern worker's rights."),
+      createTutorialPage("The most effective change comes when many act as one. Communication is key, and it's importance makes it a valuable target for opponents.\n\nMost apps use the internet to work, and so they're all vulnerable to disruption and blocking."),
+      createTutorialPage("Gather is different. It's decentralised, so all your messages stay in the protest and not in the world wide web. Automatic encryption means nobody can intercept what you send and receive.\n\nAll you need to do is join a gathering, and you're able to communicate with security and safety in mind."),
+      createTutorialPage("Everyone's messages are placed in a single, shared channel. Sending a message adds it to the top of the feed."),
+      createTutorialPage("You can use hashtags to copy messages into different channels, to make discussing specific things simpler."),
+      createTutorialPage("Liking messages gives them greater prominence, making important messages easier for everyone to read."),
+      createTutorialPage("Your identity on Gather is transient.\n\nYou don't need to give any personal information, and you can change it at any time.")
     ];
   }
 
   Widget createTutorialPage(String content, { bool isLastPage = false}){
-    return Center(child: Text(content),);
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black),
+        ),
+      )
+    );
     /* return Scaffold(
       body: Container(
         child: Center(
@@ -98,7 +110,7 @@ class _TutorialState extends State<Tutorial>{
     if(currentPage % 1 == 0){
       controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
 
-      if(currentPage == 2)
+      if(currentPage == 5)
         buttonProps = { "label": Text("Create identity"), "color": Colors.green, "onPressed": createIdentity };
         setState(() {});
     }
@@ -127,8 +139,8 @@ class _TutorialState extends State<Tutorial>{
     double currentPage = controller.page!;
 
     if(currentPage >= 1) controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
-    if(currentPage <= 3){
-      buttonProps = { "label": Text("Next"), "color": Colors.blue, "onPressed": nextPage };
+    if(currentPage <= 6){
+      buttonProps = { "label": Text("Next"), "color": Colors.amber, "onPressed": nextPage };
       setState(() {});
     }
   }

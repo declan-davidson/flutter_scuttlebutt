@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
         if(snapshot.hasData){
           return MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Gather',
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.amber,
             ),
             home: snapshot.data! ? const Tutorial() : const HomePage(),
 /*             initialRoute: /* snapshot.data */ "/tutorial",

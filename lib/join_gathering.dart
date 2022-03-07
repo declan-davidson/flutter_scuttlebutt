@@ -60,6 +60,7 @@ class JoinGathering extends StatelessWidget{
       ),
       body: Center(
         child: ElevatedButton(
+          style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))))),
           child: Text("Join gathering"),
           onPressed: () async {
             await addMessages();
