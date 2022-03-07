@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
     sharedPreferences.setInt("currentStep", step);
 
     switch(step){
+      case 4:
       case 3:
       case 2: {
         retrieveMessages();
@@ -139,24 +140,42 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         title: Text("Some title"),
       ),
       drawer: Drawer(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         child: Column(
           children: [
-            Container(
-              color: Colors.blue,
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 10),)),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: Column(
+                children: [
+                  //Header
+                  ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                        Padding(padding: EdgeInsets.only(bottom: 8),),
+                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                      ],
                     ),
-                    ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      title: Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
-                      leading: Icon(Icons.person_rounded),
-                    )
-                  ]
-                )
-              ),
+                    tileColor: Colors.blue,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 10),),
+                  //Leave protest
+                  ListTile(
+                    //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                    title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    leading: Icon(Icons.hail_rounded),
+                    tileColor: Colors.redAccent,
+                    iconColor: Colors.black,
+                    minLeadingWidth: 20,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                  )
+                ],
+              )
             )
           ],
         )
@@ -199,7 +218,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   }
 
   Widget produceMessageList(List<FeedMessage> messages){
-    late Function refreshAction;
+    Function refreshAction = () async {
+      await Future.delayed(const Duration(seconds: 1));
+      retrieveMessages();
+    };
+
+    Function likeAction = (int i) async {
+      await FeedService.likeMessage(messages[i].id);
+      retrieveMessages();
+    };
 
     switch(sharedPreferences.getInt("currentStep")){
       case 2: {
@@ -215,10 +242,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
           setStep(3);
         };
       } break;
-      default: {
-        refreshAction = () async {
-          await Future.delayed(const Duration(seconds: 1));
-          retrieveMessages();
+      case 3: {
+        likeAction = (int i) async {
+          await FeedService.likeMessage(messages[i].id);
+
+          if(messages[i].content["content"] == "We're taking the next left down Bank Street #announcements #important"){
+            setStep(4);
+          }
+          else{
+            retrieveMessages();
+          }
         };
       }
     }
@@ -255,10 +288,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     children: [
                       Text(messages[i].likes.toString()),
                       IconButton(
-                        onPressed: () async {
-                          await FeedService.likeMessage(messages[i].id);
-                          retrieveMessages();
-                        },
+                        onPressed: () => likeAction(i),
                         icon: Icon(Icons.thumb_up_alt_rounded, color: Colors.grey,),
                         iconSize: 20,
                       ),
@@ -300,24 +330,42 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         ),
       ),
       drawer: Drawer(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         child: Column(
           children: [
-            Container(
-              color: Colors.blue,
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 10),)),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: Column(
+                children: [
+                  //Header
+                  ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Current profile", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 218, 218, 218))),
+                        Padding(padding: EdgeInsets.only(bottom: 8),),
+                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
+                      ],
                     ),
-                    ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      title: Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white)),
-                      leading: Icon(Icons.person_rounded),
-                    )
-                  ]
-                )
-              ),
+                    tileColor: Colors.blue,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 10),),
+                  //Leave protest
+                  ListTile(
+                    //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                    title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                    leading: Icon(Icons.hail_rounded),
+                    tileColor: Colors.redAccent,
+                    iconColor: Colors.black,
+                    minLeadingWidth: 20,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                  )
+                ],
+              )
             )
           ],
         )
@@ -327,7 +375,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         children: produceMessageLists(),
       ),
       floatingActionButton: PostMessageSheet(identity: identity, encodedSk: encodedSk, refreshMessageListCallback: retrieveMessages,),
-      bottomSheet: FloatingActionButton(onPressed: () => setStep(1)),
     );
   }
 }
