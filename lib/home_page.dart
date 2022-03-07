@@ -173,6 +173,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     iconColor: Colors.black,
                     minLeadingWidth: 20,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                    onTap: () async {
+                      Sodium.init();
+                      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+                      String encodedPk = base64Encode(keyPair.pk);
+                      sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+                      sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
+
+                      await FeedService.resetIdentity();
+                      getIdentity();
+                      setStep(1);
+                      Navigator.pop(context);
+                    }
                   )
                 ],
               )
@@ -363,6 +375,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     iconColor: Colors.black,
                     minLeadingWidth: 20,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                    onTap: () async {
+                      Sodium.init();
+                      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+                      String encodedPk = base64Encode(keyPair.pk);
+                      sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+                      sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
+                      
+                      await FeedService.resetIdentity();
+                      getIdentity();
+                      setStep(1);
+                      Navigator.pop(context);
+                    }
                   )
                 ],
               )
