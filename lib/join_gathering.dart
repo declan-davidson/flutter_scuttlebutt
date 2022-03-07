@@ -75,8 +75,9 @@ class JoinGathering extends StatelessWidget{
     while(messages.isNotEmpty){
       Map<String, String> identity = identities[random.nextInt(10)];
       String message = messages.removeAt(random.nextInt(messages.length));
+      int likes = message == "We're taking the next left down Bank Street #announcements #important" ? 3 : random.nextInt(4);
 
-      await FeedService.postMessage(message, identity["identity"]!, identity["encodedSk"]!);
+      await FeedService.postMessage(message, identity["identity"]!, identity["encodedSk"]!, likes: likes);
     }
   }
 }
