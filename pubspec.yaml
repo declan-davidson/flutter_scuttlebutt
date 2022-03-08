@@ -54,6 +54,7 @@ dependencies:
       url: https://github.com/declan-davidson/flutter_muxrpc
       ref: evaluation
   page_transition: ^2.0.5
+  auto_size_text: ^3.0.0
     # path: C:\Users\Declan\Documents\University\Project\Flutter MuxRPC\flutter_muxrpc
 
 dev_dependencies:

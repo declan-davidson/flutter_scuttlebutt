@@ -142,54 +142,58 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawer: Drawer(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: Column(
-          children: [
-            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Column(
-                children: [
-                  //Header
-                  ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
-                        Padding(padding: EdgeInsets.only(bottom: 8),),
-                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
-                      ],
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => Navigator.pop(context),
+          child: Column(
+            children: [
+              SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Column(
+                  children: [
+                    //Header
+                    ListTile(
+                      contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
+                          Padding(padding: EdgeInsets.only(bottom: 8),),
+                          Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                        ],
+                      ),
+                      tileColor: Colors.amber,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
                     ),
-                    tileColor: Colors.amber,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
-                  ),
-                  Padding(padding: EdgeInsets.only(bottom: 10),),
-                  //Leave protest
-                  ListTile(
-                    //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                    title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
-                    leading: Icon(Icons.hail_rounded),
-                    tileColor: Colors.redAccent,
-                    iconColor: Colors.black,
-                    minLeadingWidth: 20,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
-                    onTap: () async {
-                      Sodium.init();
-                      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
-                      String encodedPk = base64Encode(keyPair.pk);
-                      sharedPreferences.setString("identity", "@$encodedPk.ed25519");
-                      sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
-                      
-                      await FeedService.resetIdentity();
-                      getIdentity();
-                      setStep(1);
-                      Navigator.pop(context);
-                    }
-                  )
-                ],
+                    Padding(padding: EdgeInsets.only(bottom: 10),),
+                    //Leave protest
+                    ListTile(
+                      //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                      title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                      leading: Icon(Icons.hail_rounded),
+                      tileColor: Colors.redAccent,
+                      iconColor: Colors.black,
+                      minLeadingWidth: 20,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                      onTap: () async {
+                        Sodium.init();
+                        KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+                        String encodedPk = base64Encode(keyPair.pk);
+                        sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+                        sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
+                        
+                        await FeedService.resetIdentity();
+                        getIdentity();
+                        setStep(1);
+                        Navigator.pop(context);
+                      }
+                    )
+                  ],
+                )
               )
-            )
-          ],
+            ],
+          )
         )
       ),
       body: Container(
@@ -345,54 +349,58 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawer: Drawer(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: Column(
-          children: [
-            SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Column(
-                children: [
-                  //Header
-                  ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
-                        Padding(padding: EdgeInsets.only(bottom: 8),),
-                        Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
-                      ],
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => Navigator.pop(context),
+          child: Column(
+            children: [
+              SafeArea(child: Padding(padding: EdgeInsets.only(bottom: 115),)),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Column(
+                  children: [
+                    //Header
+                    ListTile(
+                      contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Current identity", style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Color.fromARGB(255, 107, 107, 107))),
+                          Padding(padding: EdgeInsets.only(bottom: 8),),
+                          Text(identity, style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                        ],
+                      ),
+                      tileColor: Colors.amber,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
                     ),
-                    tileColor: Colors.amber,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
-                  ),
-                  Padding(padding: EdgeInsets.only(bottom: 10),),
-                  //Leave protest
-                  ListTile(
-                    //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                    title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
-                    leading: Icon(Icons.hail_rounded),
-                    tileColor: Colors.redAccent,
-                    iconColor: Colors.black,
-                    minLeadingWidth: 20,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
-                    onTap: () async {
-                      Sodium.init();
-                      KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
-                      String encodedPk = base64Encode(keyPair.pk);
-                      sharedPreferences.setString("identity", "@$encodedPk.ed25519");
-                      sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
-                      
-                      await FeedService.resetIdentity();
-                      getIdentity();
-                      setStep(1);
-                      Navigator.pop(context);
-                    }
-                  )
-                ],
+                    Padding(padding: EdgeInsets.only(bottom: 10),),
+                    //Leave protest
+                    ListTile(
+                      //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
+                      title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                      leading: Icon(Icons.hail_rounded),
+                      tileColor: Colors.redAccent,
+                      iconColor: Colors.black,
+                      minLeadingWidth: 20,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))),
+                      onTap: () async {
+                        Sodium.init();
+                        KeyPair keyPair = Sodium.cryptoSignSeedKeypair((RandomBytes.buffer(32)));
+                        String encodedPk = base64Encode(keyPair.pk);
+                        sharedPreferences.setString("identity", "@$encodedPk.ed25519");
+                        sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
+                        
+                        await FeedService.resetIdentity();
+                        getIdentity();
+                        setStep(1);
+                        Navigator.pop(context);
+                      }
+                    )
+                  ],
+                )
               )
-            )
-          ],
+            ],
+          )
         )
       ),
       body: TabBarView(
