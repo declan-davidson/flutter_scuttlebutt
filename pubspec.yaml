@@ -55,6 +55,7 @@ dependencies:
       ref: evaluation
   page_transition: ^2.0.5
   auto_size_text: ^3.0.0
+  qr_code_scanner: ^0.7.0
     # path: C:\Users\Declan\Documents\University\Project\Flutter MuxRPC\flutter_muxrpc
 
 dev_dependencies:

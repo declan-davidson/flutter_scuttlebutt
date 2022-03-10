@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
     if(!sharedPreferences.containsKey("identity")) sharedPreferences.setString("identity", "");
     if(!sharedPreferences.containsKey("encodedSk")) sharedPreferences.setString("encodedSk", "");
     if(!sharedPreferences.containsKey("currentStep")) sharedPreferences.setInt("currentStep", 1);
+    if(!sharedPreferences.containsKey("likedMessages")) sharedPreferences.setStringList("likedMessages", []);
 /*     if(!sharedPreferences.containsKey("step2")) sharedPreferences.setBool("step2", false);
     if(!sharedPreferences.containsKey("step3")) sharedPreferences.setBool("step3", false);
     if(!sharedPreferences.containsKey("step4")) sharedPreferences.setBool("step4", false);

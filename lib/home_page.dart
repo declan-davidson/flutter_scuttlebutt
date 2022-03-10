@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawerEnableOpenDragGesture: false,
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
-        title: Text("Gather"),
+        title: Text("ToGather"),
       ),
       drawer: Drawer(
         elevation: 0,
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("You aren't currently attending a gathering.\n Join one to get started!", style: Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.5), textAlign: TextAlign.center,),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
+            Padding(padding: EdgeInsets.only(bottom: 40)),
             ElevatedButton(
               style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(25))))),
               child: Text("Join a gathering"),
@@ -241,8 +241,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
     };
 
     Function likeAction = (int i) async {
-      await FeedService.likeMessage(messages[i].id);
-      retrieveMessages();
+      String messageId = messages[i].id;
+      List<String> likedMessages = sharedPreferences.getStringList("likedMessages")!;
+      
+      if(!(likedMessages.contains(messageId))){
+        likedMessages.add(messageId);
+        sharedPreferences.setStringList("likedMessages", likedMessages);
+
+        await FeedService.likeMessage(messageId);
+        retrieveMessages();
+      }
     };
 
     switch(sharedPreferences.getInt("currentStep")){
@@ -261,13 +269,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       } break;
       case 3: {
         likeAction = (int i) async {
-          await FeedService.likeMessage(messages[i].id);
+          String messageId = messages[i].id;
+          List<String> likedMessages = sharedPreferences.getStringList("likedMessages")!;
+          
+          if(!(likedMessages.contains(messageId))){
+            likedMessages.add(messageId);
+            sharedPreferences.setStringList("likedMessages", likedMessages);
 
-          if(messages[i].content["content"] == "We're taking the next left down Bank Street #announcements #important"){
-            setStep(4);
-          }
-          else{
-            retrieveMessages();
+            await FeedService.likeMessage(messageId);
+            if(messages[i].content["content"] == "We're taking the next left down Bank Street #announcements #important"){
+              setStep(4);
+            }
+            else{
+              retrieveMessages();
+            }
           }
         };
       }
@@ -290,7 +305,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                       leading: Icon(Icons.person_rounded),
                       title: Padding(
                         padding: EdgeInsetsDirectional.only(bottom: 4),
-                        child: Text(messages[i].author, overflow: TextOverflow.fade, softWrap: false,),
+                        child: Text(
+                          messages[i].author == identity ? "Me" : messages[i].author, 
+                          overflow: TextOverflow.fade, 
+                          softWrap: false,
+                        ),
                       ),
                       subtitle: Text(readableTime(messages[i].timestamp)),
                       contentPadding: EdgeInsets.fromLTRB(16, 0, 24, 0),
@@ -339,7 +358,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
       drawerEnableOpenDragGesture: false,
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () => _scaffoldKey.currentState!.openDrawer()),
-        title: Text("Gather"),
+        title: Text("ToGather"),
         bottom: TabBar(
           isScrollable: true,
           controller: _tabController,
