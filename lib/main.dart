@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.amber,
             ),
-            home: snapshot.data! ? const Tutorial() : const HomePage(),
-/*             initialRoute: /* snapshot.data */ "/tutorial",
+            //home: snapshot.data! ? const Tutorial() : const HomePage(),
+            initialRoute: snapshot.data! ? "/tutorial" : "/homePage",
             routes: {
-              '/': (context) => const HomePage(),
-              '/tutorial': (context) => Tutorial()
-            }, */
+              '/homePage': (context) => const HomePage(),
+              '/tutorial': (context) => const Tutorial()
+            },
           );
         }
         else{

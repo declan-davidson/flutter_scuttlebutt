@@ -125,11 +125,16 @@ class _TutorialState extends State<Tutorial>{
       sharedPreferences.setString("encodedSk", base64Encode(keyPair.sk));
 
       sharedPreferences.setBool("firstRun", false);
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
+        context, 
+        "/homePage", 
+        (route) => false
+      );
+      /* Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: ((context) => const HomePage())),
         (Route<dynamic> route) => false
-      );
+      ); */
     }
   }
 

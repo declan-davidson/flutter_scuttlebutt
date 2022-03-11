@@ -63,33 +63,6 @@ class _JoinGatheringState extends State<JoinGathering>{
     "Power to the people!",
   ];
 
-  List<Widget> columnChildren = [];
-
-  @override
-  void initState() {
-    columnChildren = [
-      Expanded(
-        flex: 9,
-        child: QRView(
-          cameraFacing: CameraFacing.back,
-          key: qrKey,
-          onQRViewCreated: _onQrViewCreated,
-          overlay: QrScannerOverlayShape(
-            overlayColor: Color.fromARGB(166, 54, 54, 54),
-            borderColor: Colors.amber
-          ),
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: Center(
-          child: Text("Scan QR invite", /* style: theme.textTheme.bodyText1!.copyWith(color: Colors.black, fontSize: 18) */ style: TextStyle(color: Colors.black, fontSize: 18),)
-        )
-      )
-    ];
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
@@ -112,8 +85,8 @@ class _JoinGatheringState extends State<JoinGathering>{
       floatingActionButton: Container(
         width: screenWidth - 30,
         child: FloatingActionButton.extended(
-          label: Text("Scan QR invite"),
-          onPressed: () {},
+          label: Text("Hover over a QR code invite\nto join the gathering", textAlign: TextAlign.center,),
+          onPressed: null,
         ),
       ),
     );
@@ -152,7 +125,7 @@ class _JoinGatheringState extends State<JoinGathering>{
                         onPressed: () async {
                           await addMessages();
                           widget.setStepCallback(2);
-                          Navigator.popUntil(context, ModalRoute.withName("/"));
+                          Navigator.popUntil(context, ModalRoute.withName("/homePage"));
                         }
                       ),
                     ),

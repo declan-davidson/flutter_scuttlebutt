@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                     //Leave protest
                     ListTile(
                       //contentPadding: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                      title: Text("Leave gathering", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
+                      title: Text("Reset identity", style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black)),
                       leading: Icon(Icons.hail_rounded),
                       tileColor: Colors.redAccent,
                       iconColor: Colors.black,
