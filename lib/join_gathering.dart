@@ -85,7 +85,7 @@ class _JoinGatheringState extends State<JoinGathering>{
       floatingActionButton: Container(
         width: screenWidth - 30,
         child: FloatingActionButton.extended(
-          label: Text("Hover over a QR code invite\nto join the gathering", textAlign: TextAlign.center,),
+          label: Text("Hover over a QR code invite\nto join the gathering", textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge),
           onPressed: null,
         ),
       ),
@@ -121,7 +121,7 @@ class _JoinGatheringState extends State<JoinGathering>{
                     Container(
                       width: screenWidth - 30,
                       child: FloatingActionButton.extended(
-                        label: Text("Join gathering"),
+                        label: Text("Join gathering", style: Theme.of(context).textTheme.labelLarge),
                         onPressed: () async {
                           await addMessages();
                           widget.setStepCallback(2);
@@ -135,7 +135,7 @@ class _JoinGatheringState extends State<JoinGathering>{
                       child: FloatingActionButton.extended(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.amber,
-                        label: Text("Try again"),
+                        label: Text("Try again", style: Theme.of(context).textTheme.labelLarge),
                         onPressed: () {
                           qrViewController.resumeCamera();
                           Navigator.pop(context);

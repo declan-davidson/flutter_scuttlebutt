@@ -24,7 +24,7 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
       width: screenWidth - 30,
       padding: EdgeInsets.only(left: 2),
       child: FloatingActionButton.extended(
-        label: Text("New message"),
+        label: Text("New message", style: Theme.of(context).textTheme.labelLarge,),
         onPressed: () => showModalBottomSheet(
           isScrollControlled: true,
           constraints: BoxConstraints(maxHeight: double.infinity, maxWidth: screenWidth - 30),
@@ -42,7 +42,7 @@ class _PostMessageSheetState extends State<PostMessageSheet>{
                       Container(
                         width: screenWidth - 30,
                         child: FloatingActionButton.extended(
-                          label: Text("Post message"),
+                          label: Text("Post message", style: Theme.of(context).textTheme.labelLarge),
                           onPressed: () async {
                             _formKey.currentState?.save();
                             if(_message != null){

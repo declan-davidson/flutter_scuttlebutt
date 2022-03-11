@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
         if(snapshot.hasData){
           return MaterialApp(
-            title: 'Gather',
+            title: 'ToGather',
             theme: ThemeData(
               primarySwatch: Colors.amber,
             ),
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             initialRoute: snapshot.data! ? "/tutorial" : "/homePage",
             routes: {
               '/homePage': (context) => const HomePage(),
-              '/tutorial': (context) => const Tutorial()
+              '/tutorial': (context) => Tutorial(Theme.of(context))
             },
           );
         }
