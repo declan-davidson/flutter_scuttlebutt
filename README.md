@@ -1,16 +1,19 @@
-# flutter_scuttlebutt
+# ToGather
 
-A new Flutter project.
+A decentralised, secure and robust communications app for use during protests, utilising the Scuttlebutt protocol.
 
-## Getting Started
+## Obtaining the app
+ToGather can be built locally, or a pre-built built binary can be downloaded from the releases section of this repository.
 
-This project is a starting point for a Flutter application.
+### Build requirements
+- As a Flutter application, ToGather requires a Flutter installation along with the Android SDK and build tools to successfully build the app.  
+- A libsodium installation is also required to build its cryptographic features.
 
-A few resources to get you started if this is your first Flutter project:
+### Build steps
+- Clone repository
+- In flutter_scuttlebutt:
+  - `flutter pub get`
+  - `flutter build apk`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Testing codebase
+Flutter's built-in testing capabilities (`flutter test`) can be used to run unit tests; no unit tests are provided.
